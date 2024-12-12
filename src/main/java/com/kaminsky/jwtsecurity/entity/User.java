@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class User implements UserDetails {
 
     private String username;
     private String password;
-    private Role role;
+    private String role;
 
     @Column(name = "failed_attempts")
     private int failedAttempts;
@@ -59,7 +60,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -71,17 +72,17 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountLocked;
+        return !isAccountLocked;
     }
 
     @Override

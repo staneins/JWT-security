@@ -2,7 +2,6 @@ package com.kaminsky.jwtsecurity.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.kaminsky.jwtsecurity.entity.Role;
 import com.kaminsky.jwtsecurity.entity.User;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,7 +15,7 @@ public class UserDTO {
     private String expirationTime;
     private String username;
     private String password;
-    private Role role;
+    private String role;
     private boolean isAccountNonLocked;
     private User user;
 
@@ -92,11 +91,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
