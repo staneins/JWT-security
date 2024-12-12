@@ -21,8 +21,19 @@ public class User implements UserDetails {
     private String password;
     private Role role;
 
+    @Column(name = "failed_attempts")
+    private int failedAttempts;
+
     @Column(name = "is_account_non_locked")
-    private boolean isAccountNonLocked;
+    private boolean isAccountLocked;
+
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
 
     public Long getId() {
         return id;
@@ -70,7 +81,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return isAccountLocked;
     }
 
     @Override
@@ -83,8 +94,8 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        isAccountNonLocked = accountNonLocked;
+    public void setAccountLocked(boolean accountNonLocked) {
+        isAccountLocked = accountNonLocked;
     }
 
 }

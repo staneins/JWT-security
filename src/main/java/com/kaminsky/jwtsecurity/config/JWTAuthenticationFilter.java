@@ -28,7 +28,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         this.ourUserDetailedService = ourUserDetailedService;
     }
 
-    // Метод, выполняемый для каждого HTTP запроса
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
@@ -44,7 +43,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
         username = jwtUtils.extractUsername(jwtToken);
 
-        if (username == null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = ourUserDetailedService.loadUserByUsername(username);
             if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -54,22 +53,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(token);
                 SecurityContextHolder.setContext(context);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token has expired");
+                return;
             }
         }
-
-        // Шаг 1: Извлечение заголовка авторизации из запроса
-
-        // Шаг 2: Проверка наличия заголовка авторизации
-
-        // Шаг 3: Извлечение токена из заголовка
-
-        // Шаг 4: Извлечение имени пользователя из JWT токена
-
-        // Шаг 5: Проверка валидности токена и аутентификации
-
-        // Шаг 6: Создание нового контекста безопасности
-
-        // Шаг 7: Передача запроса на дальнейшую обработку в фильтрующий цепочке
+        filterChain.doFilter(request, response);
     }
-
 }

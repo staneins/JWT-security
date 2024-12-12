@@ -18,6 +18,22 @@ public class LoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // Логирование информации о запросе
+        long startTime = System.currentTimeMillis();
+
+        try {
+            logger.info("Request: method={} URI={} remoteAddress={}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getRemoteAddr());
+
+            filterChain.doFilter(request, response);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+
+            logger.info("Response: status={} URI={} duration={}ms",
+                    response.getStatus(),
+                    request.getRequestURI(),
+                    duration);
+        }
     }
 }
