@@ -54,7 +54,7 @@ public class AuthService {
 
             if (!user.isAccountNonLocked()) {
                 response.setStatusCode(403);
-                response.setError("Account is locked due to multiple failed login attempts.");
+                response.setError("Account is locked");
                 return response;
             }
 
@@ -69,7 +69,7 @@ public class AuthService {
             response.setToken(jwt);
             response.setRefreshToken(refreshToken);
             response.setExpirationTime("24Hr");
-            response.setMessage("Successfully signed in");
+            response.setMessage("Signed in");
         } catch (Exception e) {
             User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
             user.setFailedAttempts(user.getFailedAttempts() + 1);
@@ -97,7 +97,7 @@ public class AuthService {
             response.setToken(jwt);
             response.setRefreshToken(request.getRefreshToken());
             response.setExpirationTime("24Hr");
-            response.setMessage("Successfully refreshed token");
+            response.setMessage("Refreshed token");
         }
         response.setStatusCode(500);
         return response;
